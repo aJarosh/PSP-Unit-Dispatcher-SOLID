@@ -100,6 +100,17 @@ class Collection():
     
     def create_iterator(self):
         return Iterator(self.units)
+    
+class AllUnits:
+    def __init__(self):
+        self.units = Collection()
+        self.strategy = None
+
+    def set_strategy(self, strategy):
+        self.strategy = strategy
+
+    def start(self, coordinates):
+        self.strategy.excecute(self.units.create_iterator())
 
 def main(): # main function
     print("main funciton")
