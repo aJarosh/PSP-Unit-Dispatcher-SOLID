@@ -78,6 +78,20 @@ class Fire(Strategy):
         self.ride_time = random.randint(0, 3)
         self.fire_time = random.randint(5, 25)
 
+class Unit:
+    def __init__(self, name, coordinates):
+        self.name = name
+        self.coordinates = coordinates
+        self.vehicle = [Vehicle() for _ in range(5)]
+    def get_vehicle(self):
+        return self.vehicle
+
+    def get_distance(self, coordinates):
+        x = self.coordinates[0] - coordinates[0]
+        y = self.coordinates[1] - coordinates[1]
+        return (x**2 + y**2)**0.5
     
+
+
 def main(): # main function
     print("main funciton")
