@@ -91,7 +91,15 @@ class Unit:
         y = self.coordinates[1] - coordinates[1]
         return (x**2 + y**2)**0.5
     
+class Collection():
+    def __init__(self):
+        self.units = []
 
+    def add(self, unit):
+        self.units.append(unit)
+    
+    def create_iterator(self):
+        return Iterator(self.units)
 
 def main(): # main function
     print("main funciton")
