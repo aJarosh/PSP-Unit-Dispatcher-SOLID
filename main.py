@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import random
 
 class Strategy(ABC): #pattern for strategy
     def __init__(self):
@@ -10,6 +11,12 @@ class Strategy(ABC): #pattern for strategy
     def execute(self, iterator):
         pass
     
+    def notify_observers(self):
+        for vehicle in self.vehicles:
+            vehicle.update(self)
+    
+    def add_observer(self,vehicle):
+        self.vehicles.append(vehicle)
 
 class IObserver(ABC): #pattern for observer
     @abstractmethod
@@ -65,6 +72,12 @@ class Vehicle(IObserver):
                 self.state = self.state.next_state()
     def is_free(self):
         return isinstance(self.state, FreeState)
+    
+class Fire(Strategy):
+    def execute(self, iterator):
+        self.ride_time = random.randint(0, 3)
+        self.fire_time = random.randint(5, 25)
+
     
 def main(): # main function
     print("main funciton")
