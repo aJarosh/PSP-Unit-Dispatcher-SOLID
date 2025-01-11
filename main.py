@@ -28,7 +28,20 @@ class Iterator(ABC): #pattern for iterator
             self.position +=1
             return self.collection[self.position]
         return None
+    
+class FreeState(IState): #state pattern implementation 
+    def __init__(self, vehicle):
+        self.vehicle = vehicle
 
+    def next_state(self):
+        return BusyState(self.vehicle)
+    
+class BusyState(IState):
+    def __init__(self,vehicle):
+        self.vehicle = vehicle
 
+    def next_state(self):
+        return FreeState(self.vehicle)
+    
 def main(): # main function
     print("main funciton")
