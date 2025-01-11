@@ -1,9 +1,15 @@
 from abc import ABC, abstractmethod
 
 class Strategy(ABC): #pattern for strategy
+    def __init__(self):
+        self.vehicles =[]
+        self.ride_time = 0
+        self.fire_time = 0
+
     @abstractmethod
     def execute(self, iterator):
         pass
+    
 
 class IObserver(ABC): #pattern for observer
     @abstractmethod
@@ -42,6 +48,23 @@ class BusyState(IState):
 
     def next_state(self):
         return FreeState(self.vehicle)
+    
+class Vehicle(IObserver):
+    def __init__(self):
+        self.state = FreeState(self)
+        self.action_time = 0
+    
+    def update(self, strategy):
+        self.state = self.state.next_state
+        self.action_time = strategy.fire_time + 2* strategy.ride_time
+    
+    def make_step(self):
+        if self.action_time > 0:
+            self.action_time -=1
+            if self.action_time == 0:
+                self.state = self.state.next_state()
+    def is_free(self):
+        return isinstance(self.state, FreeState)
     
 def main(): # main function
     print("main funciton")
