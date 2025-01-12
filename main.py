@@ -67,22 +67,50 @@ class Vehicle(IObserver):
     
     def make_step(self):
         if self.action_time > 0:
+            print(f"Vehicle is occupied. Time remaining: {self.action_time}")
             self.action_time -=1
             if self.action_time == 0:
+                print("Vehicle is free")
                 self.state = self.state.next_state()
+
     def is_free(self):
         return isinstance(self.state, FreeState)
     
 class Fire(Strategy):
     def execute(self, iterator):
         self.ride_time = random.randint(0, 3)
-        self.fire_time = random.randint(5, 25)
+        while len(self.vehicles) < 3:
+            unit = iterator.next()
+            for i, vehicle in enumerate(unit.get_vehicles()):
+                if vehicle.is_free():
+                    print(f"Dispatching vehicle {i} from {unit.get_name()} for action")
+                    self.add_observer(vehicle)
+                if len(self.vehicles) >= 3:
+                    break
+
+        if random.random() > 0.16:
+            self.fire_time = random.randint(5, 25)
+            print(f"\nArrival time: {self.ride_time}, fire duration: {self.fire_time}\n")
+        else:
+            self.fire_time = 0
+            print(f"\nFalse alarm! Arrival time: {self.ride_time}\n")
+
+        self.notify_observers()
 
 class Unit:
     def __init__(self, name, coordinates):
         self.name = name
         self.coordinates = coordinates
-        self.vehicle = [Vehicle() for _ in range(5)]
+        self.vehicles = [Vehicle() for _ in range(5)]
+
+    def get_name(self):
+        return self.name
+
+    def step(self):
+        print(f"Vehicles in use {self.name}:")
+        for i, vehicle in enumerate(self.vehicles):
+            vehicle.make_step(i)
+
     def get_vehicle(self):
         return self.vehicle
 
