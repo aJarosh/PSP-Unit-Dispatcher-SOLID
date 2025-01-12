@@ -65,9 +65,9 @@ class Vehicle(IObserver):
         self.state = self.state.next_state
         self.action_time = strategy.fire_time + 2* strategy.ride_time
     
-    def make_step(self):
+    def make_step(self, index):
         if self.action_time > 0:
-            print(f"Vehicle is occupied. Time remaining: {self.action_time}")
+            print(f"{index} is occupied. Time remaining: {self.action_time}")
             self.action_time -=1
             if self.action_time == 0:
                 print("Vehicle is free")
@@ -81,6 +81,8 @@ class Fire(Strategy):
         self.ride_time = random.randint(0, 3)
         while len(self.vehicles) < 3:
             unit = iterator.next()
+            if unit is None:  
+                break
             for i, vehicle in enumerate(unit.get_vehicles()):
                 if vehicle.is_free():
                     print(f"Dispatching vehicle {i} from {unit.get_name()} for fire")
@@ -99,7 +101,7 @@ class Fire(Strategy):
 
 class Danger(Strategy):
     def execute(self, iterator):
-        self.ride_time = random(0,3)
+        self.ride_time = random.randint(0,3)
         while len(self.vehicles) < 2:
             unit = iterator.next()
             for i, vehicle in enumerate(unit.get_vehicles()):
@@ -123,6 +125,9 @@ class Unit:
 
     def get_name(self):
         return self.name
+    
+    def get_vehicles(self):
+        return self.vehicles
 
     def step(self):
         print(f"Vehicles in use {self.name}:")
@@ -147,11 +152,14 @@ class Collection():
     def create_iterator(self):
         return Iterator(self.units)
     
+    def sort(self, coordinates):
+        self.units.sort(key=lambda unit: unit.get_distance(coordinates))
+    
 class AllUnits:
     def __init__(self):
         self.units = Collection()
         self.strategy = None
-        self.init_units 
+        self.init_units()
 
     def init_units(self):
         self.units.add(Unit("JRG-1", [50.12345678901234, 19.85432167890123]))
