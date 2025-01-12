@@ -81,7 +81,7 @@ class Fire(Strategy):
         self.ride_time = random.randint(0, 3)
         while len(self.vehicles) < 3:
             unit = iterator.next()
-            if unit is None:  
+            if unit is None: 
                 break
             for i, vehicle in enumerate(unit.get_vehicles()):
                 if vehicle.is_free():
@@ -189,3 +189,27 @@ def main(): # main function
 
     x_max, x_min = 50.154564013341734, 49.95855025648944
     y_max, y_min = 20.02470275868903, 19.688292482742394
+
+    while True:
+        print("\n1. Simulate a second\n0. Exit")
+        menu = int(input())
+        if menu == 1:
+            coordinates = [
+                random.uniform(x_min, x_max),
+                random.uniform(y_min, y_max)
+            ]
+            if random.random() < 0.3:
+                print(f"Fire at: {coordinates}")
+                units.set_strategy(Fire())
+            else:
+                print(f"Danger at: {coordinates}")
+                units.set_strategy(Danger())
+
+            units.start(coordinates)
+            units.step()
+        elif menu == 0:
+            break
+        else:
+            print("Invalid option")
+
+main()
