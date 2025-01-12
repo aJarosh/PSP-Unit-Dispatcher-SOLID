@@ -83,19 +83,37 @@ class Fire(Strategy):
             unit = iterator.next()
             for i, vehicle in enumerate(unit.get_vehicles()):
                 if vehicle.is_free():
-                    print(f"Dispatching vehicle {i} from {unit.get_name()} for action")
+                    print(f"Dispatching vehicle {i} from {unit.get_name()} for fire")
                     self.add_observer(vehicle)
                 if len(self.vehicles) >= 3:
                     break
 
         if random.random() > 0.16:
             self.fire_time = random.randint(5, 25)
-            print(f"\nArrival time: {self.ride_time}, fire duration: {self.fire_time}\n")
+            print(f"\nArrival time: {self.ride_time} fire duration: {self.fire_time}\n")
         else:
             self.fire_time = 0
-            print(f"\nFalse alarm! Arrival time: {self.ride_time}\n")
+            print(f"\nFalse alarm arrival time: {self.ride_time}\n")
 
         self.notify_observers()
+
+class Danger(Strategy):
+    def execute(self, iterator):
+        self.ride_time = random(0,3)
+        while len(self.vehicles) < 2:
+            unit = iterator.next()
+            for i, vehicle in enumerate(unit.get_vehicles()):
+                if vehicle.is_free():
+                    print(f"Dispatching vehicle {i} from {unit.get_name()} for danger")
+                    self.add_observer(vehicle)
+                if len(self.vehicles) >= 2:
+                    break
+        if random.random() > 0.07:
+            self.fire_time = random.randint(5,25)
+            print(f"\nArrival time: {self.ride_time} danger duration: {self.fire_time}\n")
+        else:
+            self.fire_time = 0
+            print(f"\nFalse alarm arrival time: {self.ride_time}\n")
 
 class Unit:
     def __init__(self, name, coordinates):
