@@ -105,12 +105,33 @@ class AllUnits:
     def __init__(self):
         self.units = Collection()
         self.strategy = None
+        self.init_units 
+
+    def init_units(self):
+        self.units.add(Unit("JRG-1", [50.12345678901234, 19.85432167890123]))
+        self.units.add(Unit("JRG-2", [50.04512345678901, 19.90456789012345]))
+        self.units.add(Unit("JRG-3", [50.07654321098765, 19.81234567890123]))
+        self.units.add(Unit("JRG-4", [50.09876543210987, 19.97543210987654]))
+        self.units.add(Unit("JRG-5", [50.08123456789012, 19.73567890123456]))
+        self.units.add(Unit("JRG-6", [50.03123456789012, 19.99345678901234]))
+        self.units.add(Unit("JRG-7", [50.08765432109876, 19.95678901234567]))
+        self.units.add(Unit("JRG Szkoly Aspirantow PSP", [50.07098765432109, 20.00876543210987]))
+        self.units.add(Unit("JRG Skawina", [49.97234567890123, 19.77234567890123]))
+        self.units.add(Unit("LSP Lotnisko w Balicach", [50.06345678901234, 19.79456789012345]))
+
+    def step(self):
+        for unit in self.units.units:
+            unit.step()
 
     def set_strategy(self, strategy):
         self.strategy = strategy
 
     def start(self, coordinates):
-        self.strategy.excecute(self.units.create_iterator())
+        self.units.sort(coordinates)
+        self.strategy.execute(self.units.create_iterator())
 
 def main(): # main function
-    print("main funciton")
+    units = AllUnits()
+
+    x_max, x_min = 50.154564013341734, 49.95855025648944
+    y_max, y_min = 20.02470275868903, 19.688292482742394
