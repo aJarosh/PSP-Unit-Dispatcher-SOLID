@@ -62,7 +62,7 @@ class Vehicle(IObserver):
         self.action_time = 0
     
     def update(self, strategy):
-        self.state = self.state.next_state
+        self.state = self.state.next_state()
         self.action_time = strategy.fire_time + 2* strategy.ride_time
     
     def make_step(self, index):
